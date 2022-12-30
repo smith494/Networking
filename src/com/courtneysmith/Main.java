@@ -10,7 +10,7 @@ import java.net.URL;
 public class Main {
     public static void main(String[] args) {
         try {
-            URL url = new URL("http://example.org");
+            URL url = new URL("https://www.flickr.com/services/feeds/photos_public.gne?tags=dogs");
             //URL Connection class way of connecting to URLS
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET"); // this is a default so it's not needed
@@ -21,6 +21,7 @@ public class Main {
             System.out.println("Response code: " + responseCode);
             if(responseCode != 200){
                 System.out.println("Error reading web page");
+                System.out.println(connection.getResponseMessage());
                 return;
             }
             BufferedReader inputReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
