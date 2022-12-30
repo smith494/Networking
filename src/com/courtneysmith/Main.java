@@ -1,16 +1,35 @@
 package com.courtneysmith;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class Main {
     public static void main(String[] args) {
         try {
             URL url = new URL("http://example.org");
             //URL Connection class way of connecting to URLS
-            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET"); // this is a default so it's not needed
+            connection.setRequestProperty("User-Agent", "Chrome");
+            connection.setReadTimeout(30000);
+
+            int responseCode = connection.getResponseCode(); // this performance the connection without call .connect()
+            System.out.println("Response code: " + responseCode);
+            if(responseCode != 200){
+                System.out.println("Error reading web page");
+                return;
+            }
+            BufferedReader inputReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            String line;
+            while ((line = inputReader.readLine()) != null){
+                System.out.println(line);
+            }
+            inputReader.close();
 //            urlConnection.setDoOutput(true);
 //            urlConnection.connect();
 //            BufferedReader inputStream = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
